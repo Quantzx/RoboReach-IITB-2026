@@ -46,9 +46,18 @@ Base: |                   |    (CG) X     |
                              FRONT OF BOT
 
 =======================================================================
+```
+
+**Design Verification Notes:**
+
+* **Track Width:** 190 mm strictly satisfies the < 200 mm Start-Box limit.
+* **Ground Clearance:** 50 mm Wheel Radius > 40 mm Speed Breaker Peak (Guarantees clearance).
+
+---
+
 ## 2. Arm Mechanism
 
-To secure maximum points in high-precision tasks like **Robonardo DaVinci** (130 pts) and **Buzzed** (150 pts), the manipulator must balance a compact stowed kinematic envelope (fitting inside the $300 \times 200 \times 300\text{ mm}$ start box) with multi-axis dexterity and a 450 mm vertical reach.
+To secure maximum points in high-precision tasks like **Robonardo DaVinci** (130 pts) and **Buzzed** (150 pts), the manipulator must balance a compact stowed kinematic envelope (fitting inside the  	imes 200 	imes 300	ext{ mm}$ start box) with multi-axis dexterity and a 450 mm vertical reach.
 
 The **3-Link Revolute Arm with Wrist** was chosen because its independent joint control allows active pitch and roll adjustment at the end-effector. A 2-link revolute arm lacks the extra degree of freedom needed to orient the loop parallel to a sloping wire during the Buzzed task, risking a 20-point collision penalty per touch. A linear lead-screw lift provides superior base stability and vertical stiffness, but lost because its rigid linear actuation cannot tilt the gripper for angular trajectory tracking. A telescopic arm offers a great reach-to-stowed ratio, but was rejected due to high mechanical backlash, pulley slop, and internal binding issues that ruin tracing precision. The 3-link revolute design provides the exact angular manoeuvrability required to complete all manipulation tasks while extending to 470 mm to clear the 450 mm requirement with a safety margin.
 
@@ -69,19 +78,19 @@ The **3-Link Revolute Arm with Wrist** was chosen because its independent joint 
 * **Degrees of Freedom (DoF):** A 3-link arm provides independent joint control (adding pitch/roll at the wrist). The "Buzzed" task requires moving a loop along a wire. If the wire slopes, the gripper must tilt to match it to avoid 20-point collision penalties.
 * **Stiffness & Backlash:** Holding a payload at a 470 mm extension induces massive lever-arm stress. High stiffness ensures the arm does not visibly sag. Minimizing backlash is mathematically mandatory to draw clean lines during the marker task.
 * **Link Dimensions:**
-  * Base height: $h_s = 80\text{ mm}$
-  * Bicep: $L_1 = 180\text{ mm}$
-  * Forearm: $L_2 = 150\text{ mm}$
-  * Wrist/Gripper: $L_3 = 60\text{ mm}$
+  * Base height:  = 80	ext{ mm}$
+  * Bicep:  = 180	ext{ mm}$
+  * Forearm:  = 150	ext{ mm}$
+  * Wrist/Gripper:  = 60	ext{ mm}$
 * **Forward Kinematics Equation:**
 
-  $$z = h_s + L_1 \sin\theta_1 + L_2 \sin(\theta_1+\theta_2) + L_3 \sin(\theta_1+\theta_2+\theta_3)$$
+8434z = h_s + L_1 \sin	heta_1 + L_2 \sin(	heta_1+	heta_2) + L_3 \sin(	heta_1+	heta_2+	heta_3)8434
 
-* **Reach Proof:** At maximum vertical extension ($\theta_1 = 90^\circ, \theta_2 = 0^\circ, \theta_3 = 0^\circ$):
+* **Reach Proof:** At maximum vertical extension ($	heta_1 = 90^\circ, 	heta_2 = 0^\circ, 	heta_3 = 0^\circ$):
 
-  $$z = 80 + 180(1) + 150(1) + 60(1) = 470\text{ mm}$$
+8434z = 80 + 180(1) + 150(1) + 60(1) = 470	ext{ mm}8434
 
-* **Verification:** $470\text{ mm} \ge 450\text{ mm}$ target reach requirement, leaving a 20 mm clearance margin while keeping ground clearance $\ge 50\text{ mm}$ at rest.
+* **Verification:** 	ext{ mm} \ge 450	ext{ mm}$ target reach requirement, leaving a 20 mm clearance margin while keeping ground clearance $\ge 50	ext{ mm}$ at rest.
 
 ```text
 ==================== SIDE VIEW : 3-LINK REVOLUTE ARM ====================
@@ -105,7 +114,11 @@ The **3-Link Revolute Arm with Wrist** was chosen because its independent joint 
     |                 |                             |
     +---[BASE 80]-----+                         (O) SHOULDER 
    ===================                              |
-     CHASSIS MOUNT                              [BASE 80mm]
+     CHASSIS MOUNT                              [BASE 80mm] 
+```
+
+---
+
 ## 3. Gripper Mechanism
 
 The end-effector must adapt to multiple geometries mechanically (cubes, tapered cones, thin markers), as adhesives, magnets, and suction are strictly prohibited. The parallel-jaw gripper provides symmetrical clamping force ideal for flat cubes but fails on irregular shapes. When grabbing a cone with flat jaws, the contact area reduces to a single tangent line, causing vertical slip.
@@ -141,16 +154,13 @@ The **Underactuated Adaptive Fingers (Fin-Ray mechanism)** solve this using form
                                  [SERVO ACTUATOR]
                                         | (Tendon/Pull Wire)
                               +---------+---------+
-                             /                     \
-       (Compliant Cross-Ribs)===                 === (Compliant Cross-Ribs)
-                           /                         \
-                         ///          +---+          \\\
-                        ///          /     \          \\\
-    Fingers deform ---> |||         | CONE  |         ||| <--- Fingers deform
-    around object.      \\\          \     /          ///      around object.
-                         \\\          +---+          ///
+                             /                            (Compliant Cross-Ribs)===                 === (Compliant Cross-Ribs)
+                           /                                                  ///          +---+          \                        ///          /     \          \    Fingers deform ---> |||         | CONE  |         ||| <--- Fingers deform
+    around object.      \          \     /          ///      around object.
+                         \          +---+          ///
                            \                         /
                             =========================
                                (High-Friction Pads)
 
 ===========================================================================
+```
